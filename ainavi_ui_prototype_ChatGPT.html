@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AINAVI メイン画面 プロトタイプ</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* チャットエリアの開閉用アニメーション */
+    #chat-area.collapsed {
+      height: 3rem;
+    }
+  </style>
+</head>
+<body class="h-screen bg-gray-100">
+  <div class="flex flex-col h-full">
+    <!-- 地図エリア（上半分） -->
+    <div id="map-area" class="flex-1 bg-blue-200 flex items-center justify-center">
+      <span class="text-gray-700 text-lg">[ここに地図が入ります]</span>
+    </div>
+
+    <!-- チャットエリア（下半分・開閉可能） -->
+    <div id="chat-area" class="h-1/2 bg-white shadow-lg relative transition-all duration-300 flex flex-col">
+      <!-- 開閉ボタン -->
+      <button onclick="toggleChat()" class="absolute top-0 right-0 m-2 text-xs text-gray-600 underline">開閉</button>
+
+      <!-- チャットログ -->
+      <div id="chat-log" class="flex-1 overflow-y-auto p-2 text-sm">
+        <div class="text-gray-700 mb-1">AI: こんにちは！どこに行きたいですか？</div>
+      </div>
+
+      <!-- 入力フォーム -->
+      <form onsubmit="handleSubmit(event)" class="p-2 border-t flex">
+        <input type="text" id="user-input" placeholder="行きたい場所を話しかけてください" class="flex-1 border px-2 py-1 text-sm rounded" required />
+        <button type="submit" class="ml-2 bg-blue-500 text-white px-3 py-1 text-sm rounded">送信</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleChat() {
+      const chat = document.getElementById('chat-area');
+      chat.classList.toggle('collapsed');
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('user-input');
+      const log = document.getElementById('chat-log');
+      const msg = input.value;
+
+      // ユーザーの発言を追加
+      const userMsg = document.createElement('div');
+      userMsg.className = 'text-right text-blue-600 mb-1';
+      userMsg.textContent = 'あなた: ' + msg;
+      log.appendChild(userMsg);
+
+      // ダミーのAI応答を追加
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'text-gray-700 mb-1';
+      aiMsg.textContent = 'AI: 「' + msg + '」ですね。おすすめルートを検索します！';
+      log.appendChild(aiMsg);
+
+      input.value = '';
+      log.scrollTop = log.scrollHeight;
+    }
+  </script>
+</body>
+</html>
